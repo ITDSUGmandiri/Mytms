@@ -1,0 +1,42 @@
+# rekap to do list manual
+
+1. lokasi_kerja (done)
+2. unit (done)
+3. schedule_job (done)
+4. biaya_perbaikan (done)
+5. aset (done)
+6. penghuni (done)
+7. penghuni_kerabat (done)
+8. penghuni_art (done)
+9. penghuni_kendaraan (done)
+
+10. user
+11. user_permission
+11. user_type
+
+=====================================
+
+1. banyak tambah field di table aset 
+
+2. jangan lupa setting on delete cascade, on update cascade ke table yg ngerefer ke table aset, inv_log_data_location, inv_log_data_status (done)
+3. jangan lupa buat tombol delete, update, transfer aset antar unit
+4. masih ada bugs di dropdown unit, ketika form validation false, pilihan yg di pilih user hilang. tidak kembali ke pilihan terakhir
+5. master data fasilitas masih ada yang error, nyontek dari yg aplikasi mydashboard aja (done)
+
+
+nb :
+- lihat referensi aplikasi ci-myinventory
+- jangan lupa buat log kegiatan kerja
+
+# selasa, 2 januari 2024
+1. insert data ke table log aset.
+- inv_log_data_location
+- inv_log_data_location
+
+2. delete data aset (done) -> 14:21
+
+3. jangan lupa setting on delete cascade, on update cascade ke table yg ngerefer ke table aset, 
+inv_log_data_location, inv_log_data_status (done) -> sebelum isoma
+
+# jumat, 5 januari 2024
+1. table asset harus cascade ke unit
