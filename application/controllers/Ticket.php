@@ -125,6 +125,7 @@ class Ticket extends CI_Controller {
 
 			$this->form_validation->set_rules('service_family_id', 'Service Family', 'callback__service_family_id_check');
 			$this->form_validation->set_rules('type_incident', 'Type Incident', 'callback__type_incident_id_check');
+			$this->form_validation->set_rules('sub_type_incident', 'Sub Type Incident', 'callback__sub_type_incident_id_check');
 
 			// check if there's valid input
 			if (isset($_POST) && !empty($_POST)) {
@@ -158,6 +159,13 @@ class Ticket extends CI_Controller {
 						$no_unit = $cek_unit['no_unit'];
 					}
 
+					//echo $this->input->get('sub_type_incident');
+					//echo $_GET["sub_type_incident"];
+					//echo $_POST["hidden_sub_type_incident_id"];
+
+					
+					//exit();
+
 					$data_task = array(
 						'tiket' => $tiket,
 						'id_area' => $this->input->post('id_lok'),
@@ -177,53 +185,54 @@ class Ticket extends CI_Controller {
 						'user_create' => $loggedinuser->username,
 						'create_date' => date("Y-m-d H:i:s"),
 						'type_problem' => $this->input->post('type_incident'),
+						'sub_type_incident_id' => $this->input->post("sub_type_incident"),
 						'ntf' => 0,
 						'service_family_id' => $this->input->post('service_family_id')
 					);
 
-					$add = $this->db->insert('schedule_job', $data_task);
+					 $add = $this->db->insert('schedule_job', $data_task);
 
-					$tokenTL = $this->db->query("SELECT * FROM user WHERE user_type = 7");
+					 $tokenTL = $this->db->query("SELECT * FROM user WHERE user_type = 7");
 
-            		foreach ($tokenTL->result() as $rows) {
-                        $pesan = "No Tiket : $tiket\nPelapor :$job_detail ($nama_unit) \nBlok : $blok, Unit : $no_unit";
-                        $topic = "7";
-                        $fcmtoken = $rows->token_ntf;
-                        $this->sendFCM($topic, $pesan, $fcmtoken);
-                    }
+            		 foreach ($tokenTL->result() as $rows) {
+                         $pesan = "No Tiket : $tiket\nPelapor :$job_detail ($nama_unit) \nBlok : $blok, Unit : $no_unit";
+                         $topic = "7";
+                         $fcmtoken = $rows->token_ntf;
+                         $this->sendFCM($topic, $pesan, $fcmtoken);
+                     }
            
-            		$last_id = $this->db->insert_id();
+            		 $last_id = $this->db->insert_id();
 
-					if ($this->db->affected_rows($add) > 0) {
+					 if ($this->db->affected_rows($add) > 0) {
 
-						$data = array(
-							'id_task' => $last_id,
-							'user_id' => $loggedinuser->username,
-							'log_status' => 1,
-							'keterangan' => "Add task : $job_detail",
-							'create_date' => date("Y-m-d H:i:s")
-						);
+					 	$data = array(
+					 		'id_task' => $last_id,
+					 		'user_id' => $loggedinuser->username,
+					 		'log_status' => 1,
+					 		'keterangan' => "Add task : $job_detail",
+					 		'create_date' => date("Y-m-d H:i:s")
+					 	);
 		
-						$tambah = $this->tickets_model->tambahComment($data);
+					 	$tambah = $this->tickets_model->tambahComment($data);
 		
-						//$this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Success </div>');	
-						$this->session->set_flashdata('success', 'Tambah' . ' data ticket berhasil');
-						//redirect('Helpdesk/Update?id= ' . encrypt_url($last_id) . '');
+					 	//$this->session->set_flashdata('success', '<div class="alert alert-success" role="alert">Success </div>');	
+					 	$this->session->set_flashdata('success', 'Tambah' . ' data ticket berhasil');
+					 	//redirect('Helpdesk/Update?id= ' . encrypt_url($last_id) . '');
 
-						redirect('ticket/add', 'refresh');
+					 	redirect('ticket/add', 'refresh');
 
-					} else {
+					 } else {
 
-						$this->session->set_flashdata('error',
-							$this->config->item('error_start_delimiter', 'ion_auth')
-							."Data Saving Failed!".
-							$this->config->item('error_end_delimiter', 'ion_auth')
-						);
+					 	$this->session->set_flashdata('error',
+					 		$this->config->item('error_start_delimiter', 'ion_auth')
+					 		."Data Saving Failed!".
+					 		$this->config->item('error_end_delimiter', 'ion_auth')
+					 	);
 
-						//redirect('ticket/ticket_update?id= ' . encrypt_url($last_id) . '');
-						redirect('ticket/add', 'refresh');
+					 	//redirect('ticket/ticket_update?id= ' . encrypt_url($last_id) . '');
+					 	redirect('ticket/add', 'refresh');
 		
-					}
+					 }
 
 				}
 				// validation Failed
@@ -349,7 +358,6 @@ class Ticket extends CI_Controller {
 			$this->data['data_list_area'] = $this->tickets_model->get_area();
 			$this->data['data_list_service_family'] = $this->tickets_model->getServiceFamily();
 			$this->data['list_ticket'] = $this->tickets_model->get_ticket_by_id($dec);
-
 			$this->data['open_form'] = "open";
 			$this->load->view('partials/_alte_header', $this->data);
 			$this->load->view('partials/_alte_menu');
@@ -386,6 +394,7 @@ class Ticket extends CI_Controller {
 
 			$this->form_validation->set_rules('service_family_id', 'Service Family', 'callback__service_family_id_check');
 			$this->form_validation->set_rules('type_incident', 'Type Incident', 'callback__type_incident_id_check');
+			$this->form_validation->set_rules('sub_type_incident', 'Sub Type Incident', 'callback__sub_type_incident_id_check');
 
 			// check if there's valid input
 			if (isset($_POST) && !empty($_POST)) {
@@ -411,6 +420,7 @@ class Ticket extends CI_Controller {
 
 						'service_family_id' => $this->input->post('service_family_id'),
 						'type_problem' => $this->input->post('type_incident'),
+						'sub_type_incident_id' => $this->input->post('sub_type_incident'),
 					);
 
 					// check to see if we are inserting the data
@@ -695,6 +705,9 @@ class Ticket extends CI_Controller {
 		$id_status = (isset($_GET['id_status']))?($_GET['id_status']):'0';
 		$id_status = ($id_status == '') ? '0' : $id_status;
 
+		$service_family_id = (isset($_GET['service_family_id']))?($_GET['service_family_id']):'0';
+		$service_family_id = ($service_family_id == '') ? '0' : $service_family_id;
+
 		$type_incident_id = (isset($_GET['type_incident_id']))?($_GET['type_incident_id']):'0';
 		$type_incident_id = ($type_incident_id == '') ? '0' : $type_incident_id;
 
@@ -702,6 +715,7 @@ class Ticket extends CI_Controller {
 		$params['id_lok'] = $id_lok;
 		$params['id_unit'] = $id_unit;
 		$params['id_status'] = $id_status;
+		$params['service_family_id'] = $service_family_id;
 		$params['type_incident_id'] = $type_incident_id;
 		
 		$rResult = $this->tickets_model->getListTicket($aColumns, $sWhere, $sOrder, $top, $limit, $params);
@@ -724,6 +738,7 @@ class Ticket extends CI_Controller {
 			"id_lok" => $id_lok,
 			"id_unit" => $id_unit,
 			"id_status" => $id_status,
+			"service_family_id" => $service_family_id,
 			"type_incident_id" => $type_incident_id,
 			"aaData" => array()
 		);	
@@ -924,6 +939,42 @@ class Ticket extends CI_Controller {
 		
 	}
 
+	function load_dropdown_sub_type_incident()
+	{
+		
+		$type_incident_id = $this->input->get('type_incident_id');
+
+		if ($this->tickets_model->load_dropdown_sub_type_incident($type_incident_id)->num_rows() > 0){
+			$is_data_ada = TRUE;
+			$list_data = $this->tickets_model->load_dropdown_sub_type_incident($type_incident_id)->result_array();
+		} else {
+			$is_data_ada = FALSE;
+		}
+
+		$ddata = array();
+
+		foreach ($list_data as $qryget) 
+		{
+
+			$row = array();
+
+			$row['id_sub_type_incident'] = $qryget['id_sub_type_incident'];
+			$row['sub_type'] = $qryget['sub_type'];
+			$ddata[] = $row;
+		
+		}
+
+		$output = array(
+			"is_data_ada" => $is_data_ada,
+			"list_data" => $ddata,
+		);
+		
+		//output to json format
+		echo json_encode($output);
+		
+	}
+
+
 	function load_dropdown_kondisi()
 	{
 		
@@ -1038,6 +1089,17 @@ class Ticket extends CI_Controller {
 	{
 		if ($value == '0') {
 			$this->form_validation->set_message('_kondisi_check', '%s Harus Di Isi');
+			return FALSE;
+		}
+		else {
+			return TRUE;
+		}
+	}
+
+	public function _sub_type_incident_id_check($value)
+	{
+		if ($value == '0') {
+			$this->form_validation->set_message('_sub_type_incident_id_check', '%s Harus Di Isi');
 			return FALSE;
 		}
 		else {

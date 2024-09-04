@@ -16,6 +16,8 @@
         
         <!-- Main content -->
         <section class="content">
+
+        <?php //echo $message; ?>
              
               <div class="box">
 
@@ -27,14 +29,14 @@
 
                     <div class="row">
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         
                         <select name="id_lok" id="id_lok" class="form-control">
                         </select>
 
                       </div>
 
-                      <div class="col-md-3">
+                      <div class="col-md-2">
                         
                         <select name="id_unit" id="id_unit" class="form-control select2">
                           <option value="0">- Pilih Unit -</option>
@@ -42,20 +44,13 @@
 
                       </div>
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                         
                           <select name="id_status" id="id_status" class="form-control">
                           </select>
 
                         </div>
 
-                        <div class="col-md-3">
-                        
-                          <select name="type_incident_id" id="type_incident_id" class="form-control">
-                          </select>
-
-                        </div>
-        
                     </div>
                 
                 </div>
@@ -233,7 +228,6 @@
 
       load_dropdown_area();
       load_dropdown_status();
-      load_dropdown_type_incident();
         
       table = $('#dataTables-list').DataTable({ 
 
@@ -251,7 +245,9 @@
             { "name": "id_lok", "value": $('#id_lok').val()},
             { "name": "id_unit", "value": $('#id_unit').val()},
             { "name": "id_status", "value": $('#id_status').val()},
-            { "name": "type_incident_id", "value": $('#type_incident_id').val()} 
+            { "name": "service_family_id", "value": $('#service_family_id').val()},
+            { "name": "type_incident", "value": $('#type_incident').val()},
+            { "name": "sub_type_incident", "value": $('#sub_type_incident').val()} 
           );
         },
 
@@ -297,7 +293,7 @@
         
       });
 
-      $('#id_lok, #id_unit, #id_status, #type_incident_id').change(function(){
+      $('#id_lok, #id_unit, #id_status, #service_family_id, #type_incident, #sub_type_incident').change(function(){
         //table.draw();
         reload_table()
 	   	});
@@ -528,31 +524,7 @@
 
 	}
 
-  function load_dropdown_type_incident(){
-		
-		//get a reference to the select element
-		var $type_incident_id = $('#type_incident_id');
 
-		//request the JSON data and parse into the select element
-		$.ajax({
-		url:'<?php echo site_url() . 'ticket/load_dropdown_type_incident'; ?>',
-		dataType: 'JSON', 
-		success: function(data){
 
-			//clear the current content of the select
-			$type_incident_id.html('');
-			$type_incident_id.append('<option value = "0">- Pilih Type Incident -</option>');
-			//iterate over the data and append a select option
-			$.each(data.list_data, function (key, val){
-				$type_incident_id.append('<option value = "' + val.id + '">' + val.type + '</option>');
-			})
 
-		}, 			
-		error: function(){
-			$type_incident_id.html('<option value = "-1">- Data tidak ada -</option>');
-		}
-							
-		});
-
-	}
 </script>

@@ -178,6 +178,19 @@
 								</div>
 							</div>
 
+							<div class="form-group">
+								<label for="sub_type_incident" class="control-label col-md-2">* Sub Type Incident</label>
+								<div class="col-md-8 <?php if (form_error('sub_type_incident')) {echo "has-error";} ?>">
+
+									<select name="sub_type_incident" id="sub_type_incident" class="form-control select2">
+										<option value="0">- Pilih Sub Type Incident -</option>
+									</select>
+
+									<input type="hidden" name="hidden_sub_type_incident_id" id="hidden_sub_type_incident_id" value="<?php echo set_value('sub_type_incident'); ?>">
+									<div class="invalid-feedback"><?= form_error('sub_type_incident', '<div class="error">', '</div>') ?></div>
+								</div>
+							</div>
+
 							<hr>
 
 							<div class="form-group">
@@ -277,7 +290,8 @@
 
 	$(document).ready(function(){
 
-		load_dropdown_type_incident();
+		//load_dropdown_type_incident();
+		// load_dropdown_sub_type_incident(),
 		load_dropdown_petugas1();
 		load_dropdown_petugas2();
 
@@ -300,6 +314,17 @@
 			load_dropdown_type_incident(this.value);
 		});
 
+		$('#type_incident').change(function(){
+			//console.log("TESTING");
+			// let type_incident_id = this.value;
+    		load_dropdown_sub_type_incident();
+		});
+		//let hidden_type_incident_id = $('#hidden_type_incident_id').val();
+  		
+		//if (hidden_type_incident_id != '') {
+        //	load_dropdown_sub_type_incident(hidden_type_incident_id);
+		//}
+
 		$('#petugas1').change(function(){
 			
 			$.get( "<?php echo site_url(); ?>ticket/getUsersTableById/" + this.value, function(data) {
@@ -317,6 +342,8 @@
 			});
 
 		});
+
+		
 
 	});
 
@@ -477,5 +504,43 @@
 							
 		});
 
+	
 	}
+
+
+	function load_dropdown_sub_type_incident() {
+    // Dapatkan referensi elemen select sub_type_incident
+    let $sub_type_incident = $('#sub_type_incident');
+    let hidden_sub_type_incident_id = $('#hidden_sub_type_incident_id').val();
+    // Request data JSON dan parsing ke elemen select
+    $.ajax({
+        url: '<?php echo site_url() . 'ticket/load_dropdown_sub_type_incident'; ?>',
+        dataType: 'JSON',
+        data: {type_incident_id: document.getElementById("type_incident").value},
+        success: function(data) {
+			//console.log('xxx',data);
+
+            if (data.is_data_ada) {
+                // Hapus isi dropdown saat ini
+                $sub_type_incident.html('');
+                $sub_type_incident.append('<option value="0">- Pilih Sub Type Incident -</option>');
+
+                // Iterasi data dan tambahkan opsi ke dropdown
+                $.each(data.list_data, function(key, val) {
+                    if (hidden_sub_type_incident_id == val.id_sub_type_incident) {
+                        $sub_type_incident.append('<option selected="selected" value="' + val.id_sub_type_incident + '">' + val.sub_type + '</option>');
+                    } else {
+                        $sub_type_incident.append('<option value="' + val.id_sub_type_incident + '">' + val.sub_type + '</option>');
+                    }
+                });
+            } else {
+                $sub_type_incident.html('<option value="-1">- Tidak ada data -</option>');
+            }
+        },
+        error: function() {
+            $sub_type_incident.html('<option value="-1">- Data tidak ada -</option>');
+        }
+    }); 
+}
+
 	</script>

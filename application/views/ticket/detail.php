@@ -255,6 +255,11 @@
             </tr>
 
             <tr>  
+              <th class="col-lg-3 active">Sub Type Incident</th>
+              <td><?php echo $data->sub_type_incident_id; ?></td>
+            </tr>
+
+            <tr>  
               <th class="col-lg-3 active">Last Status</th>
               <td>
                 <?php 

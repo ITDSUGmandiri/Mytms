@@ -23,6 +23,7 @@ class Tickets_model extends CI_Model
 		$this->loggedinuser     	= $this->ion_auth->user()->row();
 		$this->schedule_job_table 	= 'schedule_job';
 		$this->type_incident_table 	= 'type_incident';
+		$this->sub_type_incident_table = 'sub_type_incident';
 		$this->divisi_table 		= 'divisi';
 		$this->status_progres_table = 'status_progres';
 		$this->users_groups_table 	= 'users_groups';
@@ -112,6 +113,14 @@ class Tickets_model extends CI_Model
 		return $query;	
 	}
 
+	function load_dropdown_sub_type_incident($type_incident_id)
+	{
+		$this->db->order_by('sub_type', 'ASC');
+		$this->db->where('type_incident_id', $type_incident_id);
+		$query = $this->db->get('sub_type_incident');
+		return $query;	
+	}
+
 	function load_dropdown_petugas()
 	{
 		$this->db->order_by('first_name', 'ASC');
@@ -132,6 +141,7 @@ class Tickets_model extends CI_Model
 		$id_lok = $params['id_lok'];
 		$id_unit = $params['id_unit'];
 		$id_status = $params['id_status'];
+		$service_family_id = $params['service_family_id'];
 		$type_incident_id = $params['type_incident_id'];
 
 		if ($id_lok != '0'){
@@ -297,6 +307,7 @@ class Tickets_model extends CI_Model
 		$id_lok = $params['id_lok'];
 		$id_unit = $params['id_unit'];
 		$id_status = $params['id_status'];
+		$service_family_id = $params['service_family_id'];
 		$type_incident_id = $params['type_incident_id'];
 
 		if ($id_lok != '0'){
@@ -375,6 +386,7 @@ class Tickets_model extends CI_Model
 		$id_lok = $params['id_lok'];
 		$id_unit = $params['id_unit'];
 		$id_status = $params['id_status'];
+		$service_family_id = $params['service_family_id'];
 		$type_incident_id = $params['type_incident_id'];
 
 		if ($id_lok != '0'){
@@ -886,7 +898,7 @@ class Tickets_model extends CI_Model
 	function getDetailTicket($dec)        
     {
                 
-        $this->db->select("A.*,B.username as name_pic,B1.username as name_pic1,B2.username as name_pic_complete,C.nama_unit, C.blok,C.no_unit,D.desc_status,E.username as name_author,F.nama_lokasi,G.type as type_problem, H.service_family_name");
+        $this->db->select("A.*,B.username as name_pic,B1.username as name_pic1,B2.username as name_pic_complete,C.nama_unit, C.blok,C.no_unit,D.desc_status,E.username as name_author,F.nama_lokasi,G.type as type_problem, H.service_family_name, I.sub_type as sub_type_incident_id");
         $this->db->from('schedule_job as A');
         $this->db->join('user as B', 'B.user_id = A.pic ','LEFT');
         $this->db->join('user as B1', 'B1.user_id = A.pic1 ','LEFT');          
@@ -897,6 +909,7 @@ class Tickets_model extends CI_Model
         $this->db->join('lokasi_kerja as F', 'F.id = A.id_area ','LEFT');
 		$this->db->join('type_incident as G', 'G.id = A.type_problem ','LEFT');
 		$this->db->join('service_family as H', 'H.id_service_family = A.service_family_id ','LEFT');
+		$this->db->join('sub_type_incident as I', 'I.id_sub_type_incident = A.sub_type_incident_id','LEFT');
         //$this->db->join('(select incident_id,sum(biaya) as total_perbaikan from biaya_perbaikan) as G', 'G.incident_id = A.id ','LEFT');
         $this->db->where('A.id',$dec);
         $this->db->limit(1);
