@@ -111,7 +111,7 @@
 							<div class="form-group">
 								<label for="pelapor" class="control-label col-md-2">* Pelapor</label>
 								<div class="col-md-8">
-									<textarea name="pelapor" id="pelapor" class="form-control text_editor" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->pelapor; ?></textarea>
+									<textarea name="pelapor" id="pelapor" class="form-control" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->pelapor; ?></textarea>
 									<div class="invalid-feedback"><?= form_error('pelapor', '<div class="error">', '</div>') ?></div>
 								</div>
 							</div>
@@ -119,7 +119,7 @@
 							<div class="form-group">
 								<label for="job_detail" class="control-label col-md-2">* Laporan Problem</label>
 								<div class="col-md-8">
-									<textarea name="job_detail" id="job_detail" class="form-control text_editor" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->job_detail; ?></textarea>
+									<textarea name="job_detail" id="job_detail" class="form-control" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->job_detail; ?></textarea>
 									<div class="invalid-feedback"><?= form_error('job_detail', '<div class="error">', '</div>') ?></div>
 								</div>
 							</div>
@@ -127,7 +127,7 @@
 							<div class="form-group">
 								<label for="note" class="control-label col-md-2">Solusi</label>
 								<div class="col-md-8">
-									<textarea name="note" id="note" class="form-control text_editor" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->note; ?></textarea>
+									<textarea name="note" id="note" class="form-control" rows="4" style="resize:vertical; min-height:100px; max-height:200px;"><?php echo $data->note; ?></textarea>
 								</div>
 							</div>
 
